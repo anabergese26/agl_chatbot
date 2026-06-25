@@ -7,23 +7,22 @@
   </head>
   <body>
       <h1>Italy AGL Allianz</h1>
-  
+
       <script src="https://github.com/Cognigy/Webchat/releases/latest/download/webchat.js"></script>
       <script>
           initWebchat(
               "https://endpoint-eu-dev-cai.cognigy.cloud/bd318f3d4b8008affb6f70ee30402228f52d8444f47be4ece2f3dd752c5faf1a"
           );
 
-          // Paso 1: esperar que el start button esté en el DOM
           const observer = new MutationObserver(() => {
               const startBtn = document.querySelector('[data-test="webchat-start-chat-button"]');
               if (startBtn) {
                   observer.disconnect();
 
-                  // Paso 2: cuando el usuario clickea el toggle → auto-click start button
                   document.addEventListener('click', (e) => {
                       if (e.target.closest('[data-cognigy-webchat-toggle]')) {
                           startBtn.click();
+                          startBtn.blur();
                       }
                   });
               }
