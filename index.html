@@ -49,21 +49,6 @@
           initWebchat(
               "https://endpoint-eu-dev-cai.cognigy.cloud/bd318f3d4b8008affb6f70ee30402228f52d8444f47be4ece2f3dd752c5faf1a"
           );
-
-          const observer = new MutationObserver(() => {
-              const startBtn = document.querySelector('[data-test="webchat-start-chat-button"]');
-              if (startBtn) {
-                  observer.disconnect();
-
-                  document.addEventListener('click', (e) => {
-                      if (e.target.closest('[data-cognigy-webchat-toggle]')) {
-                          startBtn.click();
-                          startBtn.blur();
-                      }
-                  });
-              }
-          });
-          observer.observe(document.body, { childList: true, subtree: true });
       </script>
 
   </body>
