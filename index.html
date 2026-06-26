@@ -10,6 +10,42 @@
 
       <script src="https://github.com/Cognigy/Webchat/releases/latest/download/webchat.js"></script>
       <script>
+        (function () {
+          // Evitar múltiples instancias si el script se carga más de una vez
+          if (window.__cognigyAutoClickObserver) {
+            window.__cognigyAutoClickObserver.disconnect();
+          }
+        
+          const ROOT_SELECTOR = '[data-cognigy-webchat-root="true"]';
+          const BTN_SELECTOR  = '[data-test="webchat-start-chat-button"]';
+        
+          const rootEl = document.querySelector(ROOT_SELECTOR);
+          if (!rootEl) return;
+        
+          const observer = new MutationObserver((mutations) => {
+            for (const mutation of mutations) {
+              if (mutation.type !== 'childList' || mutation.addedNodes.length === 0) continue;
+        
+              for (const node of mutation.addedNodes) {
+                if (node.nodeType !== Node.ELEMENT_NODE) continue;
+        
+                const btn = node.id === 'webchatWindow'
+                  ? node.querySelector(BTN_SELECTOR)
+                  : (node.matches?.(BTN_SELECTOR) ? node : node.querySelector?.(BTN_SELECTOR));
+        
+                if (btn) {
+                  setTimeout(() => btn.click(), 150);
+                  return;
+                }
+              }
+            }
+          });
+        
+          observer.observe(rootEl, { childList: true, subtree: true });
+          window.__cognigyAutoClickObserver = observer;
+        })();
+      </script>
+      <script>
           initWebchat(
               "https://endpoint-eu-dev-cai.cognigy.cloud/bd318f3d4b8008affb6f70ee30402228f52d8444f47be4ece2f3dd752c5faf1a"
           );
